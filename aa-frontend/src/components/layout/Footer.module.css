@@ -1,0 +1,43 @@
+.footer {
+  background-color: #e8f4f8; /* Azul muito claro */
+  color: #2c3e50; /* Texto escuro para contraste */
+  padding: 2rem 0;
+  text-align: center;
+  border-top: 3px solid #2e8b57; /* Verde como destaque */
+}
+
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 0.9375rem; /* 15px */
+}
+
+.footerLinks {
+  margin: 1rem 0;
+}
+
+.footerLinks a {
+  color: #2e8b57; /* Verde para links */
+  margin: 0 0.5rem;
+  text-decoration: none;
+  transition: color 0.3s;
+  font-weight: 500;
+}
+
+.footerLinks a:hover {
+  color: #1d6e42; /* Verde mais escuro no hover */
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .footerLinks {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .footerLinks a {
+    margin: 0.25rem 0;
+  }
+}

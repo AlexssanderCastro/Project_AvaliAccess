@@ -1,0 +1,132 @@
+.homeContainer {
+  display: flex;
+  flex-direction: column;
+}
+
+.container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 0.9375rem; /* 15px */
+}
+
+/* Hero Section - Agora com altura fixa para uniformidade */
+.heroSection {
+  background-position: center;
+  background-size: cover;
+  color: white;
+  min-height: 70vh; /* Altura mínima para uniformidade */
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+
+.heroOverlay {
+  background: rgba(26, 46, 53, 0.85); /* Azul escuro com transparência */
+  width: 100%;
+  min-height: 70vh; /* Mesma altura da seção hero */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.heroContent {
+  text-align: center;
+  max-width: 1200px;
+  width: 90%;
+  margin: 0 auto;
+  padding: 2rem 0;
+}
+
+.heroContent h1 {
+  font-size: 2.8rem;
+  margin-bottom: 1.5rem;
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.heroContent p {
+  font-size: 1.4rem;
+  margin-bottom: 2.5rem;
+  color: #e0f7fa;
+  line-height: 1.6;
+}
+
+.filtersContainer {
+  background-color: rgba(255, 255, 255, 0.95);
+  padding: 2rem;
+  border-radius: 1.25rem; /* 2vh */
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  width: 100%;
+}
+
+/* Featured Section */
+.featuredSection {
+  padding: 4rem 0;
+  background-color: #f8f9fa;
+}
+
+.featuredSection h2 {
+  text-align: center;
+  margin-bottom: 3rem;
+  font-size: 2.2rem;
+  color: #1a2e35;
+  font-weight: 600;
+}
+
+/* Responsividade */
+@media (max-width: 992px) {
+  .heroContent h1 {
+    font-size: 2.4rem;
+  }
+  
+  .heroContent p {
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .heroSection,
+  .heroOverlay {
+    min-height: 60vh;
+  }
+  
+  .heroContent {
+    padding: 1.5rem 0;
+  }
+  
+  .heroContent h1 {
+    font-size: 2rem;
+  }
+  
+  .heroContent p {
+    font-size: 1.1rem;
+    margin-bottom: 2rem;
+  }
+  
+  .filtersContainer {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .heroSection,
+  .heroOverlay {
+    min-height: 50vh;
+  }
+  
+  .heroContent h1 {
+    font-size: 1.8rem;
+  }
+  
+  .featuredSection h2 {
+    font-size: 1.8rem;
+  }
+}
+
+.slick-slide > div {
+  margin: 0 0.625rem; /* 10px */
+  height: 100%; /* Ensure it takes full height of its container */
+  display: flex; /* Enable flexbox for proper height distribution */
+  flex-direction: column; /* Arrange items vertically */
+}
