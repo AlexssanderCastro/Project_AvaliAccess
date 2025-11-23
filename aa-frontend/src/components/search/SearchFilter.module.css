@@ -23,11 +23,12 @@
 
 /* Barra de pesquisa MAIOR */
 .searchBar {
+  position: relative;
   display: flex;
   gap: 0;
   height: 3.75rem; /* 60px */
   border-radius: 0.5rem; /* 8px */
-  overflow: hidden;
+  overflow: visible;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
@@ -37,10 +38,18 @@
   border: none;
   font-size: 1.1rem;
   outline: none;
+  border-radius: 0.5rem 0 0 0.5rem;
 }
 
 .searchInput::placeholder {
   color: #888;
+}
+
+.loadingSpinner {
+  position: absolute;
+  right: 180px;
+  top: 50%;
+  transform: translateY(-50%);
 }
 
 .searchButton {
@@ -56,6 +65,7 @@
   align-items: center;
   gap: 0.5rem;
   white-space: nowrap;
+  border-radius: 0 0.5rem 0.5rem 0;
 }
 
 .searchButton:hover {
@@ -64,6 +74,107 @@
 
 .searchIcon {
   font-size: 1.2rem;
+}
+
+/* Dropdown de sugestões */
+.dropdown {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  left: 0;
+  right: 0;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+  max-height: 400px;
+  overflow-y: auto;
+  z-index: 1000;
+  animation: slideDown 0.2s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dropdownItem {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  border-bottom: 1px solid #f0f0f0;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.dropdownItem:last-child {
+  border-bottom: none;
+}
+
+.dropdownItem:hover {
+  background-color: #f8f9fa;
+}
+
+.establishmentPhoto {
+  flex-shrink: 0;
+  width: 60px;
+  height: 60px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #e8f4f8;
+}
+
+.establishmentPhoto img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.noPhoto {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #e8f4f8 0%, #d0e8f0 100%);
+  font-size: 32px;
+}
+
+.establishmentInfo {
+  flex: 1;
+  min-width: 0;
+}
+
+.establishmentName {
+  font-weight: 600;
+  color: #333;
+  font-size: 16px;
+  margin-bottom: 0.25rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.establishmentDetails {
+  font-size: 14px;
+  color: #666;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.rating {
+  margin-left: auto;
+  color: #ffc107;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
 }
 
 /* Acessibilidade - Foco visível */

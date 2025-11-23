@@ -1,88 +1,40 @@
-import React from 'react';
-import Navbar from '../components/layout/Navbar';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import SearchFilter from '../components/search/SearchFilter';
-import EstablishmentCard from '../components/EstablishmentCard/EstablishmentCard';
 import fundoPesquisa from '../assets/images/fundo-pesquisa.jpg';
 import styles from './HomePage.module.css';
-import Slider from 'react-slick'; // Import Slider
-import 'slick-carousel/slick/slick.css'; // Import slick-carousel CSS
-import 'slick-carousel/slick/slick-theme.css'; // Import slick-carousel theme CSS
+import Slider from 'react-slick';
+import 'slick-carousel/slick/slick.css';
+import 'slick-carousel/slick/slick-theme.css';
+import { EstablishmentAPI, EstablishmentResponse } from '../services/establishmentApi';
 
 const HomePage: React.FC = () => {
-  const featuredEstablishments = [
-    {
-      id: 1,
-      name: "Shopping Center Norte",
-      rating: 4.5,
-      reviews: 128,
-      address: "Av. Cruzeiro do Sul, 1.890 - Santana, São Paulo - SP",
-      type: "Shopping"
-    },
-    {
-      id: 2,
-      name: "Restaurante Sabor Paulista",
-      rating: 4.2,
-      reviews: 76,
-      address: "R. Augusta, 512 - Consolação, São Paulo - SP",
-      type: "Restaurante"
-    },
-    {
-      id: 3,
-      name: "Cinema Art",
-      rating: 4.7,
-      reviews: 95,
-      address: "R. Frei Caneca, 569 - Consolação, São Paulo - SP",
-      type: "Cinema"
-    },
-    {
-      id: 4,
-      name: "Parque Ibirapuera",
-      rating: 4.8,
-      reviews: 250,
-      address: "Av. Pedro Álvares Cabral, s/n - Vila Mariana, São Paulo - SP",
-      type: "Parque"
-    },
-    {
-      id: 5,
-      name: "Museu do Futebol",
-      rating: 4.6,
-      reviews: 180,
-      address: "Praça Charles Miller, s/n - Pacaembu, São Paulo - SP",
-      type: "Museu"
-    },
-    {
-      id: 6,
-      name: "Teatro Municipal",
-      rating: 4.9,
-      reviews: 150,
-      address: "Praça Ramos de Azevedo, s/n - Centro, São Paulo - SP",
-      type: "Teatro"
-    },
-    {
-      id: 7,
-      name: "Mercado Municipal",
-      rating: 4.3,
-      reviews: 200,
-      address: "Rua da Cantareira, 306 - Centro, São Paulo - SP",
-      type: "Mercado"
-    },
-    {
-      id: 8,
-      name: "Aquário de São Paulo",
-      rating: 4.4,
-      reviews: 110,
-      address: "Rua Dr. Gentil de Moura, 410 - Ipiranga, São Paulo - SP",
-      type: "Aquário"
-    },
-    {
-      id: 9,
-      name: "Pinacoteca do Estado",
-      rating: 4.7,
-      reviews: 90,
-      address: "Praça da Luz, 2 - Luz, São Paulo - SP",
-      type: "Museu"
+  const navigate = useNavigate();
+  const [topEstablishments, setTopEstablishments] = useState<EstablishmentResponse[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8083';
+
+  useEffect(() => {
+    loadTopEstablishments();
+  }, []);
+
+  const loadTopEstablishments = async () => {
+    setLoading(true);
+    try {
+      const response = await EstablishmentAPI.search({
+        page: 0,
+        size: 9,
+        sortBy: 'averageRating',
+        sortDirection: 'desc',
+      });
+      setTopEstablishments(response.content);
+    } catch (error) {
+      console.error('Erro ao carregar estabelecimentos:', error);
+    } finally {
+      setLoading(false);
     }
-  ];
+  };
 
   const settings = {
     dots: true,
@@ -90,6 +42,9 @@ const HomePage: React.FC = () => {
     speed: 500,
     slidesToShow: 3,
     slidesToScroll: 3,
+    autoplay: true,
+    autoplaySpeed: 4000,
+    pauseOnHover: true,
     responsive: [
       {
         breakpoint: 1280,
@@ -97,7 +52,9 @@ const HomePage: React.FC = () => {
           slidesToShow: 2,
           slidesToScroll: 2,
           infinite: true,
-          dots: true
+          dots: true,
+          autoplay: true,
+          autoplaySpeed: 4000,
         }
       },
       {
@@ -105,16 +62,15 @@ const HomePage: React.FC = () => {
         settings: {
           slidesToShow: 1,
           slidesToScroll: 1,
-          initialSlide: 1
+          autoplay: true,
+          autoplaySpeed: 4000,
         }
       }
     ]
   };
 
   return (
-    <div className={styles.homeContainer}>
-      <Navbar />
-
+    <>
       {/* Hero Section com imagem de fundo */}
       <section className={styles.heroSection} style={{ backgroundImage: `url(${fundoPesquisa})` }}>
         <div className={styles.heroOverlay}>
@@ -132,19 +88,64 @@ const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* Estabelecimentos em Destaque */}
+      {/* Estabelecimentos Mais Bem Avaliados */}
       <section className={styles.featuredSection}>
         <div className={styles.container}>
-          <h2>Estabelecimentos em destaque</h2>
+          <h2>Estabelecimentos Mais Bem Avaliados</h2>
 
-          <Slider {...settings}>
-            {featuredEstablishments.map(establishment => (
-              <EstablishmentCard key={establishment.id} {...establishment} />
-            ))}
-          </Slider>
+          {loading ? (
+            <div className="text-center py-5">
+              <div className="spinner-border text-success" role="status">
+                <span className="visually-hidden">Carregando...</span>
+              </div>
+            </div>
+          ) : topEstablishments.length === 0 ? (
+            <div className="text-center py-5">
+              <p className="text-muted">Nenhum estabelecimento encontrado.</p>
+            </div>
+          ) : (
+            <Slider {...settings}>
+              {topEstablishments.map((establishment) => {
+                const photoUrl = establishment.photoUrl
+                  ? `${API_URL}${establishment.photoUrl}`
+                  : null;
+
+                return (
+                  <div key={establishment.id} style={{ padding: '0 10px' }}>
+                    <div
+                      className={styles.establishmentCard}
+                      onClick={() => navigate(`/establishment/${establishment.id}`)}
+                    >
+                      {photoUrl ? (
+                        <img
+                          src={photoUrl}
+                          alt={establishment.name}
+                          className={styles.cardImage}
+                        />
+                      ) : (
+                        <div className={styles.noImage}>
+                          <span>🏢</span>
+                        </div>
+                      )}
+                      <div className={styles.cardContent}>
+                        <h3 className={styles.cardTitle}>{establishment.name}</h3>
+                        <p className={styles.cardAddress}>
+                          📍 {establishment.city}, {establishment.state}
+                        </p>
+                        <div className={styles.cardType}>{establishment.type}</div>
+                        <div className={styles.cardRating}>
+                          ⭐ {establishment.averageRating.toFixed(1)} ({establishment.totalRatings} {establishment.totalRatings === 1 ? 'avaliação' : 'avaliações'})
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                );
+              })}
+            </Slider>
+          )}
         </div>
       </section>
-    </div>
+    </>
   );
 };
 

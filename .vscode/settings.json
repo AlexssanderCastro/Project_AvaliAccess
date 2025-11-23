@@ -1,0 +1,19 @@
+{
+    // Java/Maven: use Maven Wrapper and keep build config in sync automatically
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "maven.terminal.useJavaHome": true,
+    "maven.executable.path": "${workspaceFolder}/aa-backend/mvnw.cmd",
+    "java.import.maven.enabled": true,
+    // Fallback source paths in case Maven import is delayed (ignored once Maven import succeeds)
+    "java.project.sourcePaths": [
+        "aa-backend/src/main/java",
+        "aa-backend/src/test/java"
+    ],
+
+    // Frontend (TypeScript/ESLint) – point VS Code to the workspace versions
+    "typescript.tsdk": "aa-frontend/node_modules/typescript/lib",
+    "eslint.workingDirectories": [
+        "aa-frontend"
+    ],
+    "eslint.nodePath": "aa-frontend/node_modules"
+}

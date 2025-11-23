@@ -1,0 +1,30 @@
+.starRating {
+  display: inline-flex;
+  gap: 4px;
+}
+
+.star {
+  color: #ffc107;
+  transition: all 0.2s ease;
+}
+
+.interactive {
+  cursor: pointer;
+}
+
+.interactive:hover {
+  transform: scale(1.2);
+}
+
+/* Tamanhos */
+.small .star {
+  font-size: 14px;
+}
+
+.medium .star {
+  font-size: 20px;
+}
+
+.large .star {
+  font-size: 28px;
+}

@@ -1,0 +1,52 @@
+.reviewCard {
+  margin-bottom: 1rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  transition: box-shadow 0.2s ease;
+}
+
+.reviewCard:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.reviewHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.userName {
+  color: #333;
+  font-size: 16px;
+}
+
+.reviewDate {
+  color: #666;
+  font-size: 14px;
+}
+
+.comment {
+  margin: 1rem 0;
+  color: #444;
+  line-height: 1.6;
+}
+
+.accessibilitySection {
+  padding: 0.75rem 0;
+  border-top: 1px solid #f0f0f0;
+}
+
+.actions {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid #f0f0f0;
+}
+
+.actionBtn {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}

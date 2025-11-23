@@ -1,0 +1,12 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "java",
+      "name": "Launch AaBackendApplication",
+      "request": "launch",
+      "mainClass": "com.avaliaccess.aa_backend.AaBackendApplication",
+      "projectName": "aa-backend"
+    }
+  ]
+}

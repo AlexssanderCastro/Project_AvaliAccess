@@ -1,0 +1,43 @@
+.pageContainer {
+  min-height: calc(100vh - 200px);
+  background: linear-gradient(135deg, #e8f4f8 0%, #ffffff 100%);
+  padding: 2rem 0;
+}
+
+.formCard {
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: none;
+  border-radius: 12px;
+}
+
+.formCard h2 {
+  color: #1a2e35;
+  font-weight: 600;
+}
+
+.photoPreview {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.photoPreview img {
+  max-width: 100%;
+  max-height: 300px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn-primary {
+  background-color: #2e8b57;
+  border-color: #2e8b57;
+}
+
+.btn-primary:hover {
+  background-color: #257547;
+  border-color: #257547;
+}
+
+.btn-primary:disabled {
+  background-color: #6c757d;
+  border-color: #6c757d;
+}
