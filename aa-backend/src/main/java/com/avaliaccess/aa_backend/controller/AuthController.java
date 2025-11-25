@@ -53,7 +53,7 @@ public class AuthController {
         user.setName(request.name());
         user.setEmail(request.email());
         user.setPassword(passwordEncoder.encode(request.password()));
-        user.getRoles().add(Role.USER);
+        user.getRoles().add(Role.USUARIO);
         userRepository.save(user);
 
         Map<String, Object> claims = new HashMap<>();

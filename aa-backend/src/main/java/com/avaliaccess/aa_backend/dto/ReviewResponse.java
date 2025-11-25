@@ -7,6 +7,7 @@ public record ReviewResponse(
     Long establishmentId,
     Long userId,
     String userName,
+    String userPhotoUrl,
     Integer rating,
     String comment,
     Boolean hasRamp,

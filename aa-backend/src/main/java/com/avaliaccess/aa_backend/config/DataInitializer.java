@@ -13,6 +13,7 @@ import com.avaliaccess.aa_backend.repository.UserRepository;
 public class DataInitializer {
 
     @Bean
+    @SuppressWarnings("unused")
     CommandLineRunner initUsers(UserRepository users, PasswordEncoder encoder) {
         return args -> {
             // Criar usuário administrador

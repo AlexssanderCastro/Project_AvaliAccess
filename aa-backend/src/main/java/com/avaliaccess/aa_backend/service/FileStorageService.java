@@ -14,7 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Service
 public class FileStorageService {
 
-    @Value("${file.upload-dir:uploads/establishments}")
+    @Value("${file.upload-dir:aa-backend/uploads/establishments}")
     private String uploadDir;
 
     public String storeFile(MultipartFile file) throws IOException {

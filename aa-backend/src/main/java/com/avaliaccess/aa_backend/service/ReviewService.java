@@ -164,6 +164,7 @@ public class ReviewService {
             review.getEstablishment().getId(),
             review.getUser().getId(),
             review.getUser().getName(),
+            review.getUser().getPhotoUrl(),
             review.getRating(),
             review.getComment(),
             review.getHasRamp(),
