@@ -1,0 +1,15 @@
+.banned {
+  color: #fff;
+  background-color: #dc3545;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: 600;
+}
+
+.active {
+  color: #fff;
+  background-color: #198754;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: 600;
+}

@@ -14,17 +14,19 @@ import com.avaliaccess.aa_backend.entity.Establishment;
 @Repository
 public interface EstablishmentRepository extends JpaRepository<Establishment, Long> {
     List<Establishment> findByCityAndActiveTrue(String city);
+    // Find by city prefix (case-insensitive) so searches like "Sao" match "Sao Paulo"
+    List<Establishment> findByCityStartingWithIgnoreCaseAndActiveTrue(String cityPrefix);
     List<Establishment> findByStateAndActiveTrue(String state);
     List<Establishment> findByTypeAndActiveTrue(String type);
     List<Establishment> findByCreatedById(Long userId);
     List<Establishment> findByActiveTrue();
     List<Establishment> findBySponsoredTrueAndActiveTrue();
     
-    @Query("SELECT e FROM Establishment e WHERE e.active = true AND " +
-           "(:name IS NULL OR LOWER(e.name) LIKE LOWER(CONCAT('%', :name, '%'))) AND " +
-           "(:city IS NULL OR e.city = :city) AND " +
-           "(:state IS NULL OR e.state = :state) AND " +
-           "(:type IS NULL OR e.type = :type)")
+        @Query("SELECT e FROM Establishment e WHERE e.active = true AND " +
+            "(:name IS NULL OR LOWER(e.name) LIKE LOWER(CONCAT('%', :name, '%'))) AND " +
+            "(:city IS NULL OR LOWER(e.city) LIKE LOWER(CONCAT(:city, '%'))) AND " +
+            "(:state IS NULL OR e.state = :state) AND " +
+            "(:type IS NULL OR e.type = :type)")
     Page<Establishment> searchEstablishments(
         @Param("name") String name,
         @Param("city") String city,

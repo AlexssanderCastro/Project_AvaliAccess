@@ -99,6 +99,75 @@
   align-items: center;
 }
 
+/* Admin dropdown */
+.adminDropdown {
+  position: relative;
+}
+
+.dropdownToggle {
+  background: none;
+  border: none;
+  color: inherit;
+  padding: 0.5rem 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.dropdownToggle:hover {
+  background: rgba(46,139,87,0.08);
+  border-radius: 6px;
+}
+
+.caret {
+  font-size: 0.8rem;
+  transition: transform 160ms ease;
+  margin-left: 6px;
+}
+
+.open .caret {
+  transform: rotate(180deg);
+}
+
+.dropdownMenu {
+  position: absolute;
+  top: 100%; /* align directly under the toggle to avoid pointer gap */
+  left: 0;
+  background: white;
+  border-radius: 6px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+  min-width: 160px;
+  padding: 8px 0;
+  display: none;
+  list-style: none; /* remove bullets */
+  margin: 0; /* remove default ul margin */
+  z-index: 200;
+}
+
+.dropdownMenu li { /* ensure individual items don't show markers */
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.open .dropdownMenu,
+.adminDropdown:hover .dropdownMenu {
+  display: block;
+}
+
+.dropdownItem {
+  display: block;
+  padding: 8px 16px;
+  color: #2c3e50;
+  text-decoration: none;
+}
+
+.dropdownItem:hover {
+  background: #f1f8f9;
+}
+
 .navLink {
   color: #2c3e50;
   text-decoration: none;

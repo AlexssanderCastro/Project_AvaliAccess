@@ -155,6 +155,37 @@ public class UserController {
         return ResponseEntity.ok().body("Usuário desbanido com sucesso");
     }
 
+    @GetMapping
+    @PreAuthorize("hasAuthority('ADMINISTRADOR')")
+    public ResponseEntity<?> listUsers(@RequestParam(value = "q", required = false) String q,
+                                       @RequestParam(value = "page", defaultValue = "0") int page,
+                                       @RequestParam(value = "size", defaultValue = "20") int size,
+                                       @RequestParam(value = "sortBy", defaultValue = "name") String sortBy,
+                                       @RequestParam(value = "sortDirection", defaultValue = "asc") String sortDirection) {
+        org.springframework.data.domain.Sort.Direction direction = "desc".equalsIgnoreCase(sortDirection)
+            ? org.springframework.data.domain.Sort.Direction.DESC
+            : org.springframework.data.domain.Sort.Direction.ASC;
+
+        org.springframework.data.domain.Pageable pageable = org.springframework.data.domain.PageRequest.of(page, size, org.springframework.data.domain.Sort.by(direction, sortBy));
+
+        org.springframework.data.domain.Page<User> usersPage;
+        String trimmed = (q == null || q.trim().isEmpty()) ? null : q.trim();
+
+        // Return only non-admin users
+        usersPage = userRepository.searchNonAdminUsers(com.avaliaccess.aa_backend.entity.Role.ADMINISTRADOR, trimmed, pageable);
+
+        org.springframework.data.domain.Page<UserProfileResponse> responsePage = usersPage.map(u -> new UserProfileResponse(
+            u.getId(),
+            u.getName(),
+            u.getEmail(),
+            u.getPhotoUrl(),
+            u.getRoles().stream().map(Enum::name).collect(java.util.stream.Collectors.toSet()),
+            Boolean.TRUE.equals(u.getBanned())
+        ));
+
+        return ResponseEntity.ok(responsePage);
+    }
+
     public record UserProfileResponse(Long id, String name, String email, String photoUrl, java.util.Set<String> roles, Boolean banned) {}
     public record UpdateProfileRequest(String name, String password) {}
 }

@@ -81,6 +81,15 @@ export const AuthAPI = {
     return response.data;
   },
 
+  getUsers: async (page = 0, size = 20, q?: string, sortBy?: string, sortDirection?: string): Promise<PageResponse<UserProfile>> => {
+    const params: any = { page, size };
+    if (q && q.trim().length > 0) params.q = q.trim();
+    if (sortBy) params.sortBy = sortBy;
+    if (sortDirection) params.sortDirection = sortDirection;
+    const response = await api.get<PageResponse<UserProfile>>('/api/users', { params });
+    return response.data;
+  },
+
   updateProfile: async (data: UpdateProfileData): Promise<UserProfile> => {
     const response = await api.put<UserProfile>('/api/users/profile', data);
     return response.data;

@@ -115,7 +115,16 @@ public class EstablishmentService {
     }
 
     public List<EstablishmentResponse> getEstablishmentsByCity(String city) {
-        return establishmentRepository.findByCityAndActiveTrue(city).stream()
+        // Use prefix search (case-insensitive) so typing the start of a city returns matches
+        if (city == null || city.trim().isEmpty()) {
+            return establishmentRepository.findByActiveTrue().stream()
+                .map(this::mapToResponse)
+                .collect(Collectors.toList());
+        }
+
+        return establishmentRepository
+            .findByCityStartingWithIgnoreCaseAndActiveTrue(city.trim())
+            .stream()
             .map(this::mapToResponse)
             .collect(Collectors.toList());
     }
@@ -130,11 +139,20 @@ public class EstablishmentService {
             String name, String city, String state, String type,
             int page, int size, String sortBy, String sortDirection) {
         
-        Sort.Direction direction = sortDirection.equalsIgnoreCase("desc") 
-            ? Sort.Direction.DESC 
+        Sort.Direction direction = sortDirection.equalsIgnoreCase("desc")
+            ? Sort.Direction.DESC
             : Sort.Direction.ASC;
-        
-        Pageable pageable = PageRequest.of(page, size, Sort.by(direction, sortBy));
+
+        // Use case-insensitive ordering when sorting by textual fields like name
+        Sort.Order order = new Sort.Order(direction, sortBy);
+        // If sorting by name (or other textual fields) ignore case so lowercase names
+        // don't get placed after uppercase ones due to DB collation.
+        if ("name".equalsIgnoreCase(sortBy) || "city".equalsIgnoreCase(sortBy)
+                || "state".equalsIgnoreCase(sortBy) || "type".equalsIgnoreCase(sortBy)) {
+            order = order.ignoreCase();
+        }
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(order));
         
         Page<Establishment> establishments = establishmentRepository.searchEstablishments(
             name, city, state, type, pageable);

@@ -10,6 +10,7 @@ import ExplorePage from '../pages/explore/ExplorePage';
 import ProfilePage from '../pages/ProfilePage';
 import AdminReportsPage from '../pages/admin/AdminReportsPage';
 import AdminSponsoredPage from '../pages/admin/AdminSponsoredPage';
+import AdminUsersPage from '../pages/admin/AdminUsersPage';
 import ProtectedRoute from '../components/auth/ProtectedRoute';
 import Layout from '../components/layout/Layout';
 
@@ -80,6 +81,17 @@ const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <AdminSponsoredPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: '/admin/users',
+        element: (
+          <ProtectedRoute>
+            {/* lazy-load or direct import */}
+            <React.Suspense fallback={<div>Carregando...</div>}>
+              <AdminUsersPage />
+            </React.Suspense>
           </ProtectedRoute>
         ),
       },
