@@ -24,8 +24,6 @@ const ReviewForm: React.FC<ReviewFormProps> = ({
       hasAccessibleParking: false,
       hasElevator: false,
       hasAccessibleEntrance: false,
-      hasTactileFloor: false,
-      hasSignLanguageService: false,
       hasAccessibleSeating: false,
     }
   );

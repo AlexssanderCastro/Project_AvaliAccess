@@ -50,16 +50,6 @@ public interface ReviewRepository extends JpaRepository<Review, Long> {
     
     @Query("SELECT CASE WHEN (SELECT COUNT(r2) FROM Review r2 WHERE r2.establishment.id = :establishmentId) = 0 THEN 0.0 " +
            "ELSE (COUNT(r) * 100.0 / (SELECT COUNT(r2) FROM Review r2 WHERE r2.establishment.id = :establishmentId)) END " +
-           "FROM Review r WHERE r.establishment.id = :establishmentId AND r.hasTactileFloor = true")
-    Double calculateTactileFloorPercentage(@Param("establishmentId") Long establishmentId);
-    
-    @Query("SELECT CASE WHEN (SELECT COUNT(r2) FROM Review r2 WHERE r2.establishment.id = :establishmentId) = 0 THEN 0.0 " +
-           "ELSE (COUNT(r) * 100.0 / (SELECT COUNT(r2) FROM Review r2 WHERE r2.establishment.id = :establishmentId)) END " +
-           "FROM Review r WHERE r.establishment.id = :establishmentId AND r.hasSignLanguageService = true")
-    Double calculateSignLanguageServicePercentage(@Param("establishmentId") Long establishmentId);
-    
-    @Query("SELECT CASE WHEN (SELECT COUNT(r2) FROM Review r2 WHERE r2.establishment.id = :establishmentId) = 0 THEN 0.0 " +
-           "ELSE (COUNT(r) * 100.0 / (SELECT COUNT(r2) FROM Review r2 WHERE r2.establishment.id = :establishmentId)) END " +
            "FROM Review r WHERE r.establishment.id = :establishmentId AND r.hasAccessibleSeating = true")
     Double calculateAccessibleSeatingPercentage(@Param("establishmentId") Long establishmentId);
 }

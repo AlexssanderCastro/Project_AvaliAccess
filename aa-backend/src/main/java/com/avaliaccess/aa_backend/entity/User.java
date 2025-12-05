@@ -51,6 +51,9 @@ public class User {
     @Column(name = "role")
     private Set<Role> roles = new HashSet<>();
 
+    @Column(nullable = false)
+    private Boolean banned = false;
+
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -68,4 +71,7 @@ public class User {
 
     public Set<Role> getRoles() { return roles; }
     public void setRoles(Set<Role> roles) { this.roles = roles; }
+
+    public Boolean getBanned() { return banned; }
+    public void setBanned(Boolean banned) { this.banned = banned; }
 }

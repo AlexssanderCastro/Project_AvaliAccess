@@ -1,0 +1,17 @@
+.targetInfo {
+  background-color: #f8f9fa;
+  padding: 12px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+}
+
+.targetInfo strong {
+  display: block;
+  margin-bottom: 4px;
+  color: #495057;
+}
+
+.targetInfo p {
+  margin: 0;
+  font-size: 0.9rem;
+}

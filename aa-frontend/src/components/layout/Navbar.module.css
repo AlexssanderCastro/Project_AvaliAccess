@@ -178,6 +178,21 @@
   padding: 0.6rem 1rem;
 }
 
+.profileLink {
+  color: #2c3e50;
+  text-decoration: none;
+  padding: 0.5rem 1rem;
+  font-weight: 500;
+  transition: color 0.3s;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.profileLink:hover {
+  color: #2e8b57;
+}
+
 /* Acessibilidade - Foco visível */
 .brand:focus,
 .navLink:focus,

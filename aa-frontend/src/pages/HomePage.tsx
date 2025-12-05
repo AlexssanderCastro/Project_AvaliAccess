@@ -7,17 +7,24 @@ import Slider from 'react-slick';
 import 'slick-carousel/slick/slick.css';
 import 'slick-carousel/slick/slick-theme.css';
 import { EstablishmentAPI, EstablishmentResponse } from '../services/establishmentApi';
+import { SponsorAPI } from '../services/sponsorApi';
 
 const HomePage: React.FC = () => {
   const navigate = useNavigate();
   const [topEstablishments, setTopEstablishments] = useState<EstablishmentResponse[]>([]);
+  const [sponsoredEstablishments, setSponsoredEstablishments] = useState<EstablishmentResponse[]>([]);
   const [loading, setLoading] = useState(true);
 
   const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8083';
 
-  useEffect(() => {
-    loadTopEstablishments();
-  }, []);
+  const loadSponsoredEstablishments = async () => {
+    try {
+      const sponsored = await SponsorAPI.getSponsored();
+      setSponsoredEstablishments(sponsored);
+    } catch (error) {
+      console.error('Erro ao carregar estabelecimentos patrocinados:', error);
+    }
+  };
 
   const loadTopEstablishments = async () => {
     setLoading(true);
@@ -35,6 +42,12 @@ const HomePage: React.FC = () => {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    loadTopEstablishments();
+    loadSponsoredEstablishments();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const settings = {
     dots: true,
@@ -69,6 +82,66 @@ const HomePage: React.FC = () => {
     ]
   };
 
+  // Configuração para carrossel de patrocinados (2 linhas de 3 = 6 por slide)
+  const sponsoredSettings = {
+    dots: true,
+    infinite: sponsoredEstablishments.length > 6,
+    speed: 500,
+    slidesToShow: 1,
+    slidesToScroll: 1,
+    autoplay: sponsoredEstablishments.length > 6,
+    autoplaySpeed: 5000,
+    pauseOnHover: true,
+    arrows: true,
+  };
+
+  // Dividir patrocinados em páginas de 6 (2 linhas de 3)
+  const sponsoredPages: EstablishmentResponse[][] = [];
+  for (let i = 0; i < sponsoredEstablishments.length; i += 6) {
+    sponsoredPages.push(sponsoredEstablishments.slice(i, i + 6));
+  }
+
+  const renderEstablishmentCard = (establishment: EstablishmentResponse, isSponsored: boolean = false) => {
+    const photoUrl = establishment.photoUrl
+      ? `${API_URL}${establishment.photoUrl}`
+      : null;
+
+    return (
+      <div
+        className={styles.establishmentCard}
+        onClick={() => navigate(`/establishment/${establishment.id}`)}
+      >
+        {isSponsored && (
+          <div className={styles.sponsoredBadge}>
+            <i className="bi bi-star-fill me-1"></i>
+            Patrocinado
+          </div>
+        )}
+        {photoUrl ? (
+          <img
+            src={photoUrl}
+            alt={establishment.name}
+            className={styles.cardImage}
+          />
+        ) : (
+          <div className={styles.noImage}>
+            <span>🏢</span>
+          </div>
+        )}
+        <div className={styles.cardContent}>
+          <h3 className={styles.cardTitle}>{establishment.name}</h3>
+          <p className={styles.cardAddress}>
+            📍 {establishment.city}, {establishment.state}
+          </p>
+          <div className={styles.cardType}>{establishment.type}</div>
+          <div className={styles.cardRating}>
+            ⭐ {establishment.averageRating.toFixed(1)} ({establishment.totalRatings} {establishment.totalRatings === 1 ? 'avaliação' : 'avaliações'})
+          </div>
+        </div>
+      </div>
+    );
+  };
+
   return (
     <>
       {/* Hero Section com imagem de fundo */}
@@ -88,6 +161,32 @@ const HomePage: React.FC = () => {
         </div>
       </section>
 
+      {/* Estabelecimentos Patrocinados */}
+      {sponsoredEstablishments.length > 0 && (
+        <section className={styles.sponsoredSection}>
+          <div className={styles.container}>
+            <h2>
+              <i className="bi bi-star-fill text-warning me-2"></i>
+              Estabelecimentos Patrocinados
+            </h2>
+
+            <Slider {...sponsoredSettings}>
+              {sponsoredPages.map((page, pageIndex) => (
+                <div key={pageIndex} className={styles.sponsoredPage}>
+                  <div className={styles.sponsoredGrid}>
+                    {page.map((establishment) => (
+                      <div key={establishment.id} className={styles.sponsoredCardWrapper}>
+                        {renderEstablishmentCard(establishment, true)}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </Slider>
+          </div>
+        </section>
+      )}
+
       {/* Estabelecimentos Mais Bem Avaliados */}
       <section className={styles.featuredSection}>
         <div className={styles.container}>
@@ -105,42 +204,11 @@ const HomePage: React.FC = () => {
             </div>
           ) : (
             <Slider {...settings}>
-              {topEstablishments.map((establishment) => {
-                const photoUrl = establishment.photoUrl
-                  ? `${API_URL}${establishment.photoUrl}`
-                  : null;
-
-                return (
-                  <div key={establishment.id} style={{ padding: '0 10px' }}>
-                    <div
-                      className={styles.establishmentCard}
-                      onClick={() => navigate(`/establishment/${establishment.id}`)}
-                    >
-                      {photoUrl ? (
-                        <img
-                          src={photoUrl}
-                          alt={establishment.name}
-                          className={styles.cardImage}
-                        />
-                      ) : (
-                        <div className={styles.noImage}>
-                          <span>🏢</span>
-                        </div>
-                      )}
-                      <div className={styles.cardContent}>
-                        <h3 className={styles.cardTitle}>{establishment.name}</h3>
-                        <p className={styles.cardAddress}>
-                          📍 {establishment.city}, {establishment.state}
-                        </p>
-                        <div className={styles.cardType}>{establishment.type}</div>
-                        <div className={styles.cardRating}>
-                          ⭐ {establishment.averageRating.toFixed(1)} ({establishment.totalRatings} {establishment.totalRatings === 1 ? 'avaliação' : 'avaliações'})
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                );
-              })}
+              {topEstablishments.map((establishment) => (
+                <div key={establishment.id} style={{ padding: '0 10px' }}>
+                  {renderEstablishmentCard(establishment)}
+                </div>
+              ))}
             </Slider>
           )}
         </div>

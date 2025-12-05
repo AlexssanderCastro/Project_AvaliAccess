@@ -53,12 +53,6 @@ public class Review {
     private Boolean hasAccessibleEntrance = false;
 
     @Column(nullable = false)
-    private Boolean hasTactileFloor = false;
-
-    @Column(nullable = false)
-    private Boolean hasSignLanguageService = false;
-
-    @Column(nullable = false)
     private Boolean hasAccessibleSeating = false;
 
     @Column(nullable = false, updatable = false)
@@ -159,21 +153,9 @@ public class Review {
         this.hasAccessibleEntrance = hasAccessibleEntrance;
     }
 
-    public Boolean getHasTactileFloor() {
-        return hasTactileFloor;
-    }
 
-    public void setHasTactileFloor(Boolean hasTactileFloor) {
-        this.hasTactileFloor = hasTactileFloor;
-    }
 
-    public Boolean getHasSignLanguageService() {
-        return hasSignLanguageService;
-    }
 
-    public void setHasSignLanguageService(Boolean hasSignLanguageService) {
-        this.hasSignLanguageService = hasSignLanguageService;
-    }
 
     public Boolean getHasAccessibleSeating() {
         return hasAccessibleSeating;

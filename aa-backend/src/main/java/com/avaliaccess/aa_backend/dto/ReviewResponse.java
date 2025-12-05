@@ -15,8 +15,6 @@ public record ReviewResponse(
     Boolean hasAccessibleParking,
     Boolean hasElevator,
     Boolean hasAccessibleEntrance,
-    Boolean hasTactileFloor,
-    Boolean hasSignLanguageService,
     Boolean hasAccessibleSeating,
     LocalDateTime createdAt,
     LocalDateTime updatedAt

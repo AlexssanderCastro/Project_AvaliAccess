@@ -1,0 +1,65 @@
+.container {
+  padding: 2rem 0;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.title {
+  color: white;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  text-align: center;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.card {
+  margin-bottom: 2rem;
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+}
+
+.cardHeader {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 1.25rem;
+  border: none;
+}
+
+.cardHeader h5 {
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+}
+
+.thumbnail {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+  border-radius: 8px;
+  margin-right: 0.75rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+:global(.table) {
+  margin-bottom: 0;
+}
+
+:global(.table th) {
+  background-color: #f8f9fa;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.85rem;
+  color: #495057;
+  border-bottom: 2px solid #dee2e6;
+}
+
+:global(.table td) {
+  vertical-align: middle;
+  padding: 1rem 0.75rem;
+}
+
+:global(.table tbody tr:hover) {
+  background-color: #f8f9fa;
+}

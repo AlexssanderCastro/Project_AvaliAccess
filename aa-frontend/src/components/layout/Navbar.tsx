@@ -47,10 +47,26 @@ const Navbar: React.FC = () => {
                 <Link className={styles.navLink} to="/register-establishment">Cadastrar Local</Link>
               </li>
             )}
+            {token && user?.roles?.includes('ADMINISTRADOR') && (
+              <>
+                <li className={styles.navItem}>
+                  <Link className={styles.navLink} to="/admin/reports">
+                    <i className="bi bi-shield-exclamation" /> Denúncias
+                  </Link>
+                </li>
+                <li className={styles.navItem}>
+                  <Link className={styles.navLink} to="/admin/sponsored">
+                    <i className="bi bi-star-fill" /> Patrocínios
+                  </Link>
+                </li>
+              </>
+            )}
             <li className={`${styles.navItem} ${styles.authButtons}`}>
               {token ? (
                 <>
-                  <span className={styles.userName}>Olá, {user?.name}</span>
+                  <Link to="/profile" className={styles.profileLink}>
+                    👤 {user?.name}
+                  </Link>
                   <button onClick={handleLogout} className={styles.loginButton}>Sair</button>
                 </>
               ) : (

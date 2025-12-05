@@ -97,8 +97,8 @@ public class SecurityConfig {
 
     // Provide JwtAuthFilter bean explicitly to avoid circular constructor reference
     @Bean
-    public JwtAuthFilter jwtAuthFilter(JwtService jwtService, UserDetailsService userDetailsService) {
-        return new JwtAuthFilter(jwtService, userDetailsService);
+    public JwtAuthFilter jwtAuthFilter(JwtService jwtService, UserDetailsService userDetailsService, UserRepository userRepository) {
+        return new JwtAuthFilter(jwtService, userDetailsService, userRepository);
     }
 
     @Bean

@@ -22,6 +22,7 @@ export interface EstablishmentResponse {
   createdById: number;
   createdAt: string;
   updatedAt: string;
+  sponsored: boolean;
 }
 
 export interface PageResponse {

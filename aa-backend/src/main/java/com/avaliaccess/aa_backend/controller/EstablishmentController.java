@@ -1,6 +1,7 @@
 package com.avaliaccess.aa_backend.controller;
 
 import java.io.IOException;
+import java.net.MalformedURLException;
 import java.nio.file.Path;
 import java.util.List;
 
@@ -121,13 +122,40 @@ public class EstablishmentController {
         return ResponseEntity.ok(results);
     }
 
+    @GetMapping("/sponsored")
+    public ResponseEntity<List<EstablishmentResponse>> getSponsoredEstablishments() {
+        return ResponseEntity.ok(establishmentService.getSponsoredEstablishments());
+    }
+
+    @PostMapping("/{id}/sponsor")
+    public ResponseEntity<?> sponsorEstablishment(@PathVariable Long id, Authentication authentication) {
+        try {
+            EstablishmentResponse response = establishmentService.sponsorEstablishment(id);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorResponse("Erro ao patrocinar estabelecimento", e.getMessage()));
+        }
+    }
+
+    @DeleteMapping("/{id}/sponsor")
+    public ResponseEntity<?> unsponsorEstablishment(@PathVariable Long id, Authentication authentication) {
+        try {
+            EstablishmentResponse response = establishmentService.unsponsorEstablishment(id);
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                .body(new ErrorResponse("Erro ao remover patrocínio", e.getMessage()));
+        }
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteEstablishment(@PathVariable Long id, Authentication authentication) {
         try {
             String userEmail = authentication.getName();
             establishmentService.deleteEstablishment(id, userEmail);
             return ResponseEntity.noContent().build();
-        } catch (Exception e) {
+        } catch (IOException e) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
                 .body(new ErrorResponse("Erro ao deletar estabelecimento", e.getMessage()));
         }
@@ -148,7 +176,7 @@ public class EstablishmentController {
             } else {
                 return ResponseEntity.notFound().build();
             }
-        } catch (Exception e) {
+        } catch (MalformedURLException e) {
             return ResponseEntity.notFound().build();
         }
     }

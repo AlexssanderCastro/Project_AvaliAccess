@@ -50,6 +50,12 @@ public class Establishment {
     @JoinColumn(name = "created_by", nullable = false)
     private User createdBy;
 
+    @Column(nullable = false)
+    private Boolean active = true;
+
+    @Column(nullable = false)
+    private Boolean sponsored = false;
+
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
@@ -146,6 +152,22 @@ public class Establishment {
 
     public void setCreatedBy(User createdBy) {
         this.createdBy = createdBy;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
+    }
+
+    public Boolean getSponsored() {
+        return sponsored;
+    }
+
+    public void setSponsored(Boolean sponsored) {
+        this.sponsored = sponsored;
     }
 
     public LocalDateTime getCreatedAt() {

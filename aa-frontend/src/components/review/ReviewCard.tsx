@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Card } from 'react-bootstrap';
 import StarRating from './StarRating';
 import AccessibilityIcons from './AccessibilityIcons';
+import UserAvatar from '../UserAvatar/UserAvatar';
+import ReportModal from '../report/ReportModal';
 import { ReviewResponse } from '../../types/review';
+import { ReportType } from '../../types/report';
 import styles from './ReviewCard.module.css';
 
 interface ReviewCardProps {
@@ -18,6 +21,7 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
   onEdit,
   onDelete,
 }) => {
+  const [showReportModal, setShowReportModal] = useState(false);
   const isOwner = currentUserId === review.userId;
   const reviewDate = new Date(review.createdAt).toLocaleDateString('pt-BR', {
     day: '2-digit',
@@ -29,9 +33,16 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
     <Card className={styles.reviewCard}>
       <Card.Body>
         <div className={styles.reviewHeader}>
-          <div>
-            <strong className={styles.userName}>{review.userName}</strong>
-            <span className={styles.reviewDate}> • {reviewDate}</span>
+          <div className={styles.userInfo}>
+            <UserAvatar 
+              photoUrl={review.userPhotoUrl} 
+              userName={review.userName} 
+              size="small" 
+            />
+            <div>
+              <strong className={styles.userName}>{review.userName}</strong>
+              <span className={styles.reviewDate}> • {reviewDate}</span>
+            </div>
           </div>
           <StarRating rating={review.rating} readOnly size="small" />
         </div>
@@ -48,35 +59,47 @@ const ReviewCard: React.FC<ReviewCardProps> = ({
               hasAccessibleParking: review.hasAccessibleParking,
               hasElevator: review.hasElevator,
               hasAccessibleEntrance: review.hasAccessibleEntrance,
-              hasTactileFloor: review.hasTactileFloor,
-              hasSignLanguageService: review.hasSignLanguageService,
               hasAccessibleSeating: review.hasAccessibleSeating,
             }}
             size="small"
           />
         </div>
 
-        {isOwner && (onEdit || onDelete) && (
-          <div className={styles.actions}>
-            {onEdit && (
-              <button
-                className={`btn btn-sm btn-outline-primary ${styles.actionBtn}`}
-                onClick={() => onEdit(review)}
-              >
-                <i className="bi bi-pencil" /> Editar
-              </button>
-            )}
-            {onDelete && (
-              <button
-                className={`btn btn-sm btn-outline-danger ${styles.actionBtn}`}
-                onClick={() => onDelete(review.id)}
-              >
-                <i className="bi bi-trash" /> Excluir
-              </button>
-            )}
-          </div>
-        )}
+        <div className={styles.actions}>
+          {isOwner && onEdit && (
+            <button
+              className={`btn btn-sm btn-outline-primary ${styles.actionBtn}`}
+              onClick={() => onEdit(review)}
+            >
+              <i className="bi bi-pencil" /> Editar
+            </button>
+          )}
+          {isOwner && onDelete && (
+            <button
+              className={`btn btn-sm btn-outline-danger ${styles.actionBtn}`}
+              onClick={() => onDelete(review.id)}
+            >
+              <i className="bi bi-trash" /> Excluir
+            </button>
+          )}
+          {!isOwner && currentUserId && (
+            <button
+              className={`btn btn-sm btn-outline-warning ${styles.actionBtn}`}
+              onClick={() => setShowReportModal(true)}
+            >
+              <i className="bi bi-flag" /> Denunciar
+            </button>
+          )}
+        </div>
       </Card.Body>
+
+      <ReportModal
+        show={showReportModal}
+        onHide={() => setShowReportModal(false)}
+        type={ReportType.REVIEW}
+        targetId={review.id}
+        targetName={`Avaliação de ${review.userName}`}
+      />
     </Card>
   );
 };

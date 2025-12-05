@@ -17,7 +17,5 @@ public record ReviewRequest(
     @NotNull Boolean hasAccessibleParking,
     @NotNull Boolean hasElevator,
     @NotNull Boolean hasAccessibleEntrance,
-    @NotNull Boolean hasTactileFloor,
-    @NotNull Boolean hasSignLanguageService,
     @NotNull Boolean hasAccessibleSeating
 ) {}

@@ -6,7 +6,5 @@ public record AccessibilityFeaturesResponse(
     Boolean hasAccessibleParking,
     Boolean hasElevator,
     Boolean hasAccessibleEntrance,
-    Boolean hasTactileFloor,
-    Boolean hasSignLanguageService,
     Boolean hasAccessibleSeating
 ) {}

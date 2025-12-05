@@ -53,8 +53,6 @@ public class ReviewService {
         review.setHasAccessibleParking(request.hasAccessibleParking());
         review.setHasElevator(request.hasElevator());
         review.setHasAccessibleEntrance(request.hasAccessibleEntrance());
-        review.setHasTactileFloor(request.hasTactileFloor());
-        review.setHasSignLanguageService(request.hasSignLanguageService());
         review.setHasAccessibleSeating(request.hasAccessibleSeating());
 
         Review savedReview = reviewRepository.save(review);
@@ -84,8 +82,6 @@ public class ReviewService {
         review.setHasAccessibleParking(request.hasAccessibleParking());
         review.setHasElevator(request.hasElevator());
         review.setHasAccessibleEntrance(request.hasAccessibleEntrance());
-        review.setHasTactileFloor(request.hasTactileFloor());
-        review.setHasSignLanguageService(request.hasSignLanguageService());
         review.setHasAccessibleSeating(request.hasAccessibleSeating());
 
         Review updatedReview = reviewRepository.save(review);
@@ -129,8 +125,6 @@ public class ReviewService {
         Double parkingPercentage = reviewRepository.calculateAccessibleParkingPercentage(establishmentId);
         Double elevatorPercentage = reviewRepository.calculateElevatorPercentage(establishmentId);
         Double entrancePercentage = reviewRepository.calculateAccessibleEntrancePercentage(establishmentId);
-        Double tactileFloorPercentage = reviewRepository.calculateTactileFloorPercentage(establishmentId);
-        Double signLanguagePercentage = reviewRepository.calculateSignLanguageServicePercentage(establishmentId);
         Double seatingPercentage = reviewRepository.calculateAccessibleSeatingPercentage(establishmentId);
 
         return new AccessibilityFeaturesResponse(
@@ -139,12 +133,10 @@ public class ReviewService {
             parkingPercentage != null && parkingPercentage >= 50.0,
             elevatorPercentage != null && elevatorPercentage >= 50.0,
             entrancePercentage != null && entrancePercentage >= 50.0,
-            tactileFloorPercentage != null && tactileFloorPercentage >= 50.0,
-            signLanguagePercentage != null && signLanguagePercentage >= 50.0,
             seatingPercentage != null && seatingPercentage >= 50.0
         );
     }
-
+    
     private void updateEstablishmentRating(Long establishmentId) {
         Double averageRating = reviewRepository.calculateAverageRating(establishmentId);
         Integer totalRatings = reviewRepository.countByEstablishmentId(establishmentId);
@@ -172,8 +164,6 @@ public class ReviewService {
             review.getHasAccessibleParking(),
             review.getHasElevator(),
             review.getHasAccessibleEntrance(),
-            review.getHasTactileFloor(),
-            review.getHasSignLanguageService(),
             review.getHasAccessibleSeating(),
             review.getCreatedAt(),
             review.getUpdatedAt()

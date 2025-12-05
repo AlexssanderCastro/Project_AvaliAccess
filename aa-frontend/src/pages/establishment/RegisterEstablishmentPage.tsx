@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Form, Button, Alert, Container, Row, Col, Card } from 'react-bootstrap';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import { EstablishmentAPI } from '../../services/establishmentApi';
 import styles from './RegisterEstablishmentPage.module.css';
@@ -38,6 +38,8 @@ const TIPOS_ESTABELECIMENTO = [
 const RegisterEstablishmentPage: React.FC = () => {
   const { token } = useAuth();
   const navigate = useNavigate();
+  const { id } = useParams<{ id: string }>();
+  const isEditMode = !!id;
   
   const [formData, setFormData] = useState({
     name: '',
@@ -52,6 +54,30 @@ const RegisterEstablishmentPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (isEditMode && id) {
+      loadEstablishment();
+    }
+  }, [isEditMode, id]);
+
+  const loadEstablishment = async () => {
+    try {
+      const establishment = await EstablishmentAPI.getById(Number(id));
+      setFormData({
+        name: establishment.name,
+        address: establishment.address,
+        city: establishment.city,
+        state: establishment.state,
+        type: establishment.type,
+      });
+      if (establishment.photoUrl) {
+        setPhotoPreview(`http://localhost:8083${establishment.photoUrl}`);
+      }
+    } catch (err: any) {
+      setError(err.response?.data?.message || 'Erro ao carregar estabelecimento');
+    }
+  };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -97,26 +123,24 @@ const RegisterEstablishmentPage: React.FC = () => {
     setLoading(true);
 
     try {
-      await EstablishmentAPI.create(formData, photo);
-      setSuccess('Estabelecimento cadastrado com sucesso!');
-      
-      // Resetar formulário
-      setFormData({
-        name: '',
-        address: '',
-        city: '',
-        state: '',
-        type: '',
-      });
-      setPhoto(null);
-      setPhotoPreview(null);
+      if (isEditMode && id) {
+        await EstablishmentAPI.update(Number(id), formData, photo);
+        setSuccess('Estabelecimento atualizado com sucesso!');
+      } else {
+        await EstablishmentAPI.create(formData, photo);
+        setSuccess('Estabelecimento cadastrado com sucesso!');
+      }
       
       // Redirecionar após 2 segundos
       setTimeout(() => {
-        navigate('/');
+        if (isEditMode && id) {
+          navigate(`/establishment/${id}`);
+        } else {
+          navigate('/');
+        }
       }, 2000);
     } catch (err: any) {
-      const errorMessage = err?.response?.data?.message || 'Erro ao cadastrar estabelecimento. Tente novamente.';
+      const errorMessage = err?.response?.data?.message || `Erro ao ${isEditMode ? 'atualizar' : 'cadastrar'} estabelecimento. Tente novamente.`;
       setError(errorMessage);
     } finally {
       setLoading(false);
@@ -141,7 +165,9 @@ const RegisterEstablishmentPage: React.FC = () => {
           <Col md={8} lg={6}>
             <Card className={styles.formCard}>
               <Card.Body>
-                <h2 className="text-center mb-4">Cadastrar Estabelecimento</h2>
+                <h2 className="text-center mb-4">
+                  {isEditMode ? 'Editar Estabelecimento' : 'Cadastrar Estabelecimento'}
+                </h2>
                 
                 {error && <Alert variant="danger" dismissible onClose={() => setError(null)}>{error}</Alert>}
                 {success && <Alert variant="success">{success}</Alert>}
@@ -247,11 +273,14 @@ const RegisterEstablishmentPage: React.FC = () => {
                       size="lg"
                       disabled={loading}
                     >
-                      {loading ? 'Cadastrando...' : 'Cadastrar Estabelecimento'}
+                      {loading 
+                        ? (isEditMode ? 'Atualizando...' : 'Cadastrando...') 
+                        : (isEditMode ? 'Atualizar Estabelecimento' : 'Cadastrar Estabelecimento')
+                      }
                     </Button>
                     <Button 
                       variant="outline-secondary" 
-                      onClick={() => navigate('/')}
+                      onClick={() => navigate(isEditMode && id ? `/establishment/${id}` : '/')}
                       disabled={loading}
                     >
                       Cancelar

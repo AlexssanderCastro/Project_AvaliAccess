@@ -1,0 +1,60 @@
+.profileContainer {
+  padding: 10px;
+}
+
+.profilePhoto {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 3px solid #007bff;
+}
+
+.profilePhotoPlaceholder {
+  width: 120px;
+  height: 120px;
+  border-radius: 50%;
+  background-color: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto;
+  font-size: 80px;
+  color: #ccc;
+}
+
+.infoSection {
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  padding: 20px;
+}
+
+.infoRow {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.infoRow:last-child {
+  border-bottom: none;
+}
+
+.infoRow strong {
+  color: #495057;
+  font-weight: 600;
+}
+
+.infoRow span {
+  color: #212529;
+}
+
+.banned {
+  color: #dc3545;
+  font-weight: bold;
+}
+
+.active {
+  color: #28a745;
+  font-weight: bold;
+}

@@ -13,12 +13,14 @@ import com.avaliaccess.aa_backend.entity.Establishment;
 
 @Repository
 public interface EstablishmentRepository extends JpaRepository<Establishment, Long> {
-    List<Establishment> findByCity(String city);
-    List<Establishment> findByState(String state);
-    List<Establishment> findByType(String type);
+    List<Establishment> findByCityAndActiveTrue(String city);
+    List<Establishment> findByStateAndActiveTrue(String state);
+    List<Establishment> findByTypeAndActiveTrue(String type);
     List<Establishment> findByCreatedById(Long userId);
+    List<Establishment> findByActiveTrue();
+    List<Establishment> findBySponsoredTrueAndActiveTrue();
     
-    @Query("SELECT e FROM Establishment e WHERE " +
+    @Query("SELECT e FROM Establishment e WHERE e.active = true AND " +
            "(:name IS NULL OR LOWER(e.name) LIKE LOWER(CONCAT('%', :name, '%'))) AND " +
            "(:city IS NULL OR e.city = :city) AND " +
            "(:state IS NULL OR e.state = :state) AND " +

@@ -6,8 +6,6 @@ export interface ReviewData {
   hasAccessibleParking: boolean;
   hasElevator: boolean;
   hasAccessibleEntrance: boolean;
-  hasTactileFloor: boolean;
-  hasSignLanguageService: boolean;
   hasAccessibleSeating: boolean;
 }
 
@@ -16,6 +14,7 @@ export interface ReviewResponse {
   establishmentId: number;
   userId: number;
   userName: string;
+  userPhotoUrl?: string;
   rating: number;
   comment: string;
   hasRamp: boolean;
@@ -23,8 +22,6 @@ export interface ReviewResponse {
   hasAccessibleParking: boolean;
   hasElevator: boolean;
   hasAccessibleEntrance: boolean;
-  hasTactileFloor: boolean;
-  hasSignLanguageService: boolean;
   hasAccessibleSeating: boolean;
   createdAt: string;
   updatedAt: string;
@@ -36,8 +33,6 @@ export interface AccessibilityFeatures {
   hasAccessibleParking: boolean;
   hasElevator: boolean;
   hasAccessibleEntrance: boolean;
-  hasTactileFloor: boolean;
-  hasSignLanguageService: boolean;
   hasAccessibleSeating: boolean;
 }
 
@@ -53,7 +48,5 @@ export const ACCESSIBILITY_FEATURES: AccessibilityFeatureInfo[] = [
   { key: 'hasAccessibleParking', label: 'Estacionamento com Vaga para Deficiente', icon: 'bi-p-square' },
   { key: 'hasElevator', label: 'Elevador', icon: 'bi-box-arrow-up' },
   { key: 'hasAccessibleEntrance', label: 'Entrada Acessível', icon: 'bi-door-closed' },
-  { key: 'hasTactileFloor', label: 'Piso Tátil', icon: 'bi-grid-3x3' },
-  { key: 'hasSignLanguageService', label: 'Atendimento em Libras', icon: 'bi-hand-index-thumb' },
-  { key: 'hasAccessibleSeating', label: 'Assentos Adaptados', icon: 'bi-chair' },
+  { key: 'hasAccessibleSeating', label: 'Assentos Adaptados', icon: 'bi-person-wheelchair' },
 ];

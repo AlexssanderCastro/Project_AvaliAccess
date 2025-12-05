@@ -15,5 +15,6 @@ public record EstablishmentResponse(
     String createdByName,
     Long createdById,
     LocalDateTime createdAt,
-    LocalDateTime updatedAt
+    LocalDateTime updatedAt,
+    Boolean sponsored
 ) {}

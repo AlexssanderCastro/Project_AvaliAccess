@@ -50,7 +50,14 @@ export interface UserProfile {
   id: number;
   name: string;
   email: string;
-  roles: string[];
+  photoUrl?: string;
+  roles?: string[];
+  banned?: boolean;
+}
+
+export interface UpdateProfileData {
+  name: string;
+  password?: string;
 }
 
 export const AuthAPI = {
@@ -68,6 +75,43 @@ export const AuthAPI = {
     const response = await api.get<UserProfile>('/api/users/me');
     return response.data;
   },
+
+  getUserById: async (userId: number): Promise<UserProfile> => {
+    const response = await api.get<UserProfile>(`/api/users/${userId}`);
+    return response.data;
+  },
+
+  updateProfile: async (data: UpdateProfileData): Promise<UserProfile> => {
+    const response = await api.put<UserProfile>('/api/users/profile', data);
+    return response.data;
+  },
+
+  uploadProfilePhoto: async (file: File): Promise<UserProfile> => {
+    const formData = new FormData();
+    formData.append('file', file);
+    const response = await api.put<UserProfile>('/api/users/profile/photo', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return response.data;
+  },
+
+  banUser: async (userId: number): Promise<void> => {
+    await api.post(`/api/users/${userId}/ban`);
+  },
+
+  unbanUser: async (userId: number): Promise<void> => {
+    await api.post(`/api/users/${userId}/unban`);
+  },
 };
+
+export interface PageResponse<T> {
+  content: T[];
+  totalPages: number;
+  totalElements: number;
+  size: number;
+  number: number;
+}
 
 export default api;

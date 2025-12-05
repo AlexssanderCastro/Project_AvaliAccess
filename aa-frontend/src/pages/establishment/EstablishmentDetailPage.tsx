@@ -5,11 +5,13 @@ import { EstablishmentAPI } from '../../services/establishmentApi';
 import { ReviewAPI } from '../../services/reviewApi';
 import { EstablishmentResponse } from '../../services/establishmentApi';
 import { ReviewResponse, ReviewData, AccessibilityFeatures } from '../../types/review';
+import { ReportType } from '../../types/report';
 import { useAuth } from '../../contexts/AuthContext';
 import StarRating from '../../components/review/StarRating';
 import AccessibilityIcons from '../../components/review/AccessibilityIcons';
 import ReviewForm from '../../components/review/ReviewForm';
 import ReviewCard from '../../components/review/ReviewCard';
+import ReportModal from '../../components/report/ReportModal';
 import styles from './EstablishmentDetailPage.module.css';
 
 const EstablishmentDetailPage: React.FC = () => {
@@ -24,6 +26,7 @@ const EstablishmentDetailPage: React.FC = () => {
   const [error, setError] = useState('');
   const [showReviewForm, setShowReviewForm] = useState(false);
   const [editingReview, setEditingReview] = useState<ReviewResponse | null>(null);
+  const [showReportModal, setShowReportModal] = useState(false);
 
   const establishmentId = Number(id);
 
@@ -185,6 +188,17 @@ const EstablishmentDetailPage: React.FC = () => {
                   />
                 </div>
               )}
+
+              {user && (
+                <Button
+                  variant="outline-warning"
+                  size="sm"
+                  className="mt-3"
+                  onClick={() => setShowReportModal(true)}
+                >
+                  <i className="bi bi-flag" /> Denunciar Estabelecimento
+                </Button>
+              )}
             </Card.Body>
           </Col>
         </Row>
@@ -216,8 +230,6 @@ const EstablishmentDetailPage: React.FC = () => {
                     hasAccessibleParking: editingReview.hasAccessibleParking,
                     hasElevator: editingReview.hasElevator,
                     hasAccessibleEntrance: editingReview.hasAccessibleEntrance,
-                    hasTactileFloor: editingReview.hasTactileFloor,
-                    hasSignLanguageService: editingReview.hasSignLanguageService,
                     hasAccessibleSeating: editingReview.hasAccessibleSeating,
                   }
                 : undefined
@@ -252,6 +264,14 @@ const EstablishmentDetailPage: React.FC = () => {
           </div>
         )}
       </div>
+
+      <ReportModal
+        show={showReportModal}
+        onHide={() => setShowReportModal(false)}
+        type={ReportType.ESTABLISHMENT}
+        targetId={establishmentId}
+        targetName={establishment.name}
+      />
     </Container>
   );
 };

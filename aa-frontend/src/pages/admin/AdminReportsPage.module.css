@@ -1,0 +1,16 @@
+.description {
+  background-color: #f8f9fa;
+  padding: 12px;
+  border-radius: 8px;
+  margin-top: 8px;
+  white-space: pre-wrap;
+}
+
+.reviewComment {
+  background-color: #fff3cd;
+  padding: 12px;
+  border-radius: 8px;
+  margin-top: 8px;
+  border-left: 4px solid #ffc107;
+  white-space: pre-wrap;
+}

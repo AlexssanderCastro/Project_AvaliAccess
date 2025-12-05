@@ -100,7 +100,7 @@ public class EstablishmentService {
     }
 
     public List<EstablishmentResponse> getAllEstablishments() {
-        return establishmentRepository.findAll().stream()
+        return establishmentRepository.findByActiveTrue().stream()
             .map(this::mapToResponse)
             .collect(Collectors.toList());
     }
@@ -108,17 +108,20 @@ public class EstablishmentService {
     public EstablishmentResponse getEstablishmentById(Long id) {
         Establishment establishment = establishmentRepository.findById(id)
             .orElseThrow(() -> new RuntimeException("Estabelecimento não encontrado"));
+        if (!Boolean.TRUE.equals(establishment.getActive())) {
+            throw new RuntimeException("Estabelecimento não encontrado");
+        }
         return mapToResponse(establishment);
     }
 
     public List<EstablishmentResponse> getEstablishmentsByCity(String city) {
-        return establishmentRepository.findByCity(city).stream()
+        return establishmentRepository.findByCityAndActiveTrue(city).stream()
             .map(this::mapToResponse)
             .collect(Collectors.toList());
     }
 
     public List<EstablishmentResponse> getEstablishmentsByType(String type) {
-        return establishmentRepository.findByType(type).stream()
+        return establishmentRepository.findByTypeAndActiveTrue(type).stream()
             .map(this::mapToResponse)
             .collect(Collectors.toList());
     }
@@ -153,14 +156,39 @@ public class EstablishmentService {
             throw new RuntimeException("Você não tem permissão para deletar este estabelecimento");
         }
 
-        // Deletar foto
-        if (establishment.getPhotoUrl() != null) {
-            String fileName = establishment.getPhotoUrl().substring(
-                establishment.getPhotoUrl().lastIndexOf("/") + 1);
-            fileStorageService.deleteFile(fileName);
+        // Soft delete - apenas desativar
+        establishment.setActive(false);
+        establishmentRepository.save(establishment);
+    }
+
+    public List<EstablishmentResponse> getSponsoredEstablishments() {
+        return establishmentRepository.findBySponsoredTrueAndActiveTrue().stream()
+            .map(this::mapToResponse)
+            .collect(Collectors.toList());
+    }
+
+    @Transactional
+    public EstablishmentResponse sponsorEstablishment(Long id) {
+        Establishment establishment = establishmentRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Estabelecimento não encontrado"));
+        
+        if (!Boolean.TRUE.equals(establishment.getActive())) {
+            throw new RuntimeException("Não é possível patrocinar um estabelecimento inativo");
         }
 
-        establishmentRepository.delete(establishment);
+        establishment.setSponsored(true);
+        establishmentRepository.save(establishment);
+        return mapToResponse(establishment);
+    }
+
+    @Transactional
+    public EstablishmentResponse unsponsorEstablishment(Long id) {
+        Establishment establishment = establishmentRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Estabelecimento não encontrado"));
+        
+        establishment.setSponsored(false);
+        establishmentRepository.save(establishment);
+        return mapToResponse(establishment);
     }
 
     private EstablishmentResponse mapToResponse(Establishment establishment) {
@@ -177,7 +205,8 @@ public class EstablishmentService {
             establishment.getCreatedBy().getName(),
             establishment.getCreatedBy().getId(),
             establishment.getCreatedAt(),
-            establishment.getUpdatedAt()
+            establishment.getUpdatedAt(),
+            establishment.getSponsored()
         );
     }
 }

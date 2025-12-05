@@ -7,6 +7,9 @@ import RegisterPage from '../pages/auth/RegisterPage';
 import RegisterEstablishmentPage from '../pages/establishment/RegisterEstablishmentPage';
 import EstablishmentDetailPage from '../pages/establishment/EstablishmentDetailPage';
 import ExplorePage from '../pages/explore/ExplorePage';
+import ProfilePage from '../pages/ProfilePage';
+import AdminReportsPage from '../pages/admin/AdminReportsPage';
+import AdminSponsoredPage from '../pages/admin/AdminSponsoredPage';
 import ProtectedRoute from '../components/auth/ProtectedRoute';
 import Layout from '../components/layout/Layout';
 
@@ -37,14 +40,46 @@ const router = createBrowserRouter([
         element: <ExplorePage />,
       },
       {
+        path: '/profile',
+        element: (
+          <ProtectedRoute>
+            <ProfilePage />
+          </ProtectedRoute>
+        ),
+      },
+      {
         path: '/establishment/:id',
         element: <EstablishmentDetailPage />,
+      },
+      {
+        path: '/establishment/:id/edit',
+        element: (
+          <ProtectedRoute>
+            <RegisterEstablishmentPage />
+          </ProtectedRoute>
+        ),
       },
       {
         path: '/register-establishment',
         element: (
           <ProtectedRoute>
             <RegisterEstablishmentPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: '/admin/reports',
+        element: (
+          <ProtectedRoute>
+            <AdminReportsPage />
+          </ProtectedRoute>
+        ),
+      },
+      {
+        path: '/admin/sponsored',
+        element: (
+          <ProtectedRoute>
+            <AdminSponsoredPage />
           </ProtectedRoute>
         ),
       },
