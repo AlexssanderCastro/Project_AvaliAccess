@@ -45,3 +45,7 @@ lerna-debug.log*
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+
+# Local uploads (if any)
+uploads/
+public/uploads/
